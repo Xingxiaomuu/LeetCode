@@ -58,6 +58,29 @@ class Solution(object):
         for i in range(1,n):
             distance = max(distance, (nums[i]-nums[i-1]))
         return distance
+
+# 217. Contains Duplicate
+# https://leetcode.com/problems/contains-duplicate/description/ 
+class Solution(object):
+    def containsDuplicate(self, nums):  
+        num_dict={}
+        for i,num in enumerate(nums):
+            if num in num_dict:
+                return True
+            num_dict[num] = i
+        return False   
+    
+# 219. Contains Duplicate II    
+# https://leetcode.com/problems/contains-duplicate-ii/description/
+class Solution(object):
+    def containsNearbyDuplicate(self, nums, k):
+        num_dict = {}
+        n=len(nums)
+        for i,num in enumerate(nums):
+            if num in num_dict and (i-num_dict[num]<=k):
+                return True
+            num_dict[num] = i
+        return False
     
 #220. Contains Duplicate III
 # https://leetcode.com/problems/contains-duplicate-iii/description/
@@ -69,3 +92,51 @@ class Solution(object):
                 if abs(nums[i] - nums[j]) <= valueDiff:
                     return True
         return False
+    
+
+def containsNearbyAlmostDuplicate(nums, k, t):
+    if t < 0: return False # edge case 
+    
+    seen = {}
+    for i, x in enumerate(nums): 
+        bkt = x//(t+1)
+        if bkt in seen and i - seen[bkt][0] <= k: 
+            return True 
+        if bkt-1 in seen and i - seen[bkt-1][0] <= k and abs(x - seen[bkt-1][1]) <= t: 
+            return True 
+        if bkt+1 in seen and i - seen[bkt+1][0] <= k and abs(x - seen[bkt+1][1]) <= t: 
+            return True 
+        seen[bkt] = (i, x) 
+    return False 
+
+containsNearbyAlmostDuplicate([1,5,9,1,5,9], 2, 3) # False
+
+class Solution:
+    def containsNearbyAlmostDuplicate(self, nums, k, t):
+        if t < 0: return False # edge case 
+        seen = {}
+        for i,x in enumerate(nums):
+            basket = x//(t+1)
+            if basket in seen and i-seen[basket][0]<=k:
+                return True
+            if basket-1 in seen and i-seen[basket-1][0]<=k and abs(x-seen[basket-1][1])<=t:
+                return True
+            if basket+1 in seen and i-seen[basket+1][0]<=k and abs(x-seen[basket+1][1])<=t:
+                return True
+            seen[basket] = (i,x)
+        return False
+    
+from collections import Counter
+class Solution(object):
+    def topKFrequent(self, words, k):
+        freq = Counter(words)
+        bucket = [[] for _ in range(len(words)+1)]
+        for word, count in freq.items():
+            bucket[count].append(word)
+        result = []
+        for i in range(len(words),0,-1):
+            if len(result) >= k:
+                break
+            if bucket[i]:
+                result.extend(sorted(bucket[i]))
+        return result[:k]

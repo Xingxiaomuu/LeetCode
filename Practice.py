@@ -1,16 +1,17 @@
-def search(nums, target):
-    left,right = 0,len(nums)-1
-    while left <= right:
-        mid = (left+right)//2
-        if nums[mid] == target:
-            return mid
-        elif nums[mid] > target:
-            right = mid - 1
+def hIndex(citations):
+    n=len(citations)
+    bucket = [0]*(n+1)
+    for c in citations:
+        if c >= n:
+            bucket[n] += 1
         else:
-            left = mid + 1
-    return -1
+            bucket[c] += 1
+    total = 0
+    for i in range(n, -1, -1):
+        total += bucket[i]
+        if total >= i:
+            return i
+    return 0
 
-nums = [-1,0,3,5,9,12]
-target = 9
-result = search(nums,target)
-print(result)
+citations = [3,0,6,1,5]
+print(hIndex(citations))
