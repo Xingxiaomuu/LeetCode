@@ -125,7 +125,9 @@ class Solution:
                 return True
             seen[basket] = (i,x)
         return False
-    
+
+# 347. Top K Frequent Elements 
+# https://leetcode.com/problems/top-k-frequent-elements/description/
 from collections import Counter
 class Solution(object):
     def topKFrequent(self, words, k):
@@ -140,3 +142,39 @@ class Solution(object):
             if bucket[i]:
                 result.extend(sorted(bucket[i]))
         return result[:k]
+    
+# 274. H-Index
+# https://leetcode.com/problems/h-index/description/
+from collections import defaultdict
+class Solution(object):
+    def hIndex(self, citations):
+        n = len(citations)
+        bucket = [0] * (n+1)
+        for c in citations:
+            if c >= n:
+                bucket[n] += 1
+            else:
+                bucket[c] += 1
+        total= 0
+        for i in range(n,-1,-1):
+            total += bucket[i]
+            if total >= i:
+                return i
+        return 0        
+
+# 324. Wiggle Sort II
+# https://leetcode.com/problems/wiggle-sort-ii/description/   
+def wigglesort(nums):
+    n = len(nums)
+    if n <= 1:
+        return nums
+
+    nums.sort()
+    half = (n+1)//2
+    small = nums[:half][::-1]
+    large = nums[half:][::-1]
+    for i in range(n):
+        if i%2 == 0:
+            nums[i] = small.pop(0)
+        else:
+            nums[i] = large.pop(0)

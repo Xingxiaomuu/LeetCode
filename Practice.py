@@ -1,17 +1,14 @@
-def hIndex(citations):
-    n=len(citations)
-    bucket = [0]*(n+1)
-    for c in citations:
-        if c >= n:
-            bucket[n] += 1
-        else:
-            bucket[c] += 1
-    total = 0
-    for i in range(n, -1, -1):
-        total += bucket[i]
-        if total >= i:
-            return i
-    return 0
+def wigglesort(nums):
+    n = len(nums)
+    if n <= 1:
+        return nums
 
-citations = [3,0,6,1,5]
-print(hIndex(citations))
+    nums.sort()
+    half = (n+1)//2
+    small = nums[:half][::-1]
+    large = nums[half:][::-1]
+    for i in range(n):
+        if i%2 == 0:
+            nums[i] = small.pop(0)
+        else:
+            nums[i] = large.pop(0)
